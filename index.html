@@ -3,645 +3,375 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>어르신을 위한 세목별 쉬운 세금 안내</title>
+    <title>관심사 높은 양도소득세 종합 진단</title>
     <style>
-        /* 어르신들이 보기 편한 시원시원한 글자 크기 지정을 위한 스타일 */
+        /* 어르신 시인성을 위한 큼직한 CSS 설계 */
         body {
-            font-family: 'Malgun Gothic', '맑은 고딕', AppleSDGothicNeo, sans-serif;
-            line-height: 1.8;
-            color: #222222;
-            background-color: #f8f9fa;
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            background-color: #f4f7f6;
+            color: #222;
             margin: 0;
             padding: 20px;
+            font-size: 24px; /* 기본 글자 크기 대폭 확대 */
+            line-height: 1.6;
         }
-        .container {
-            max-width: 850px;
+        #app-container {
+            max-width: 900px;
             margin: 0 auto;
-            background: #ffffff;
+            background: #fff;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
         }
         h1 {
+            text-align: center;
+            color: #1a365d;
             font-size: 36px;
-            color: #1e3a8a;
-            text-align: center;
-            border-bottom: 4px solid #1e3a8a;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #2b6cb0;
             padding-bottom: 15px;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
             margin-bottom: 30px;
         }
-        .zoom-info {
-            text-align: center;
-            font-size: 18px;
-            color: #6b7280;
-            background: #f3f4f6;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 30px;
+        /* 홀수 개수일 때 마지막 버튼을 가로 전체 차지하게 함 */
+        .menu-grid button:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
         }
-
-        /* 1단계 대분류: 세목별 메뉴 스타일 (가장 바깥쪽) */
-        .category-details {
-            background-color: #ffffff;
-            margin-bottom: 25px;
+        .menu-btn {
+            background-color: #2b6cb0;
+            color: white;
+            border: none;
+            padding: 20px 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            word-break: keep-all;
+        }
+        .menu-btn:hover, .menu-btn.active {
+            background-color: #1a365d;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
+        .section {
+            display: none;
+            padding: 25px;
+            background-color: #ebf8ff;
+            border: 2px solid #90cdf4;
+            border-radius: 12px;
+        }
+        .section.active {
+            display: block;
+        }
+        h2 {
+            color: #2c5282;
+            font-size: 30px;
+            border-bottom: 2px dashed #cbd5e0;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        label {
+            display: block;
+            margin-top: 25px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 18px;
+            margin-top: 10px;
+            font-size: 24px;
+            border: 2px solid #a0aec0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+        .action-btn {
+            width: 100%;
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+            padding: 22px;
+            font-size: 28px;
+            font-weight: bold;
             border-radius: 10px;
-            border: 3px solid #1e3a8a;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-top: 35px;
+            cursor: pointer;
         }
-        
-        .category-summary {
-            padding: 22px 25px;
+        .action-btn:hover {
+            background-color: #c53030;
+        }
+        .result-box {
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #fffaf0;
+            border: 3px solid #ed8936;
+            border-radius: 10px;
             font-size: 26px;
             font-weight: bold;
-            color: #ffffff;
-            background-color: #1e3a8a;
+            color: #c05621;
+            display: none;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            font-size: 26px;
+            margin-top: 20px;
+            font-weight: normal;
             cursor: pointer;
-            outline: none;
-            list-style: none;
         }
-        .category-summary::-webkit-details-marker { display: none; }
-        
-        .category-summary::after {
-            content: "▼ 보기 클릭";
-            float: right;
-            font-size: 18px;
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 2px 12px;
-            border-radius: 20px;
-        }
-        .category-details[open] > .category-summary::after {
-            content: "▲ 닫기 클릭";
-            background-color: rgba(0, 0, 0, 0.2);
-        }
-        .category-summary:hover {
-            background-color: #1d4ed8;
-        }
-
-        /* 대분류 열렸을 때 내부 구역 */
-        .category-content {
-            padding: 20px;
-            background-color: #f1f5f9;
-        }
-
-        /* 2단계 중분류: 질문별 아코디언 스타일 (안쪽) */
-        .item-details {
-            background-color: #ffffff;
-            margin-bottom: 12px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            overflow: hidden;
-        }
-        
-        .item-summary {
-            padding: 16px 20px;
-            font-size: 21px;
-            font-weight: bold;
-            color: #0f172a;
+        .checkbox-label input {
+            width: 35px;
+            height: 35px;
+            margin-right: 15px;
             cursor: pointer;
-            outline: none;
-            list-style: none;
         }
-        .item-summary::-webkit-details-marker { display: none; }
-        
-        .item-summary::after {
-            content: "▼";
-            float: right;
-            color: #6b7280;
-            font-size: 18px;
-        }
-        .item-details[open] > .item-summary::after {
-            content: "▲";
-            color: #ea580c;
-        }
-        .item-summary:hover {
-            background-color: #fef08a; /* 노란색 불빛 효과 */
-        }
-        
-        /* 최종 정답 상자 */
-        .answer-box {
-            padding: 20px;
-            background-color: #fafafa;
-            border-top: 2px solid #e2e8f0;
-            font-size: 19px;
-            color: #334155;
-            border-left: 6px solid #ea580c;
-        }
-
-        .tip-box {
-            background-color: #ecfdf5;
-            border: 3px solid #10b981;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 40px;
+        .tip {
             font-size: 20px;
-        }
-        .tip-title {
-            font-weight: bold;
-            color: #065f46;
-            font-size: 22px;
-            margin-bottom: 10px;
+            color: #4a5568;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-
-    <h1>👴 어르신을 위한 세목별 쉬운 세금 안내</h1>
+<div id="app-container">
+    <h1> 양도소득세 진단</h1>
     
-    <div class="zoom-info">
-        💡 <strong>[1단계]</strong> 먼저 궁금하신 <strong>큰 파란색 분야</strong>를 누르신 후, <br>
-        <strong>[2단계]</strong> 그 안에 나타나는 <strong>개별 질문</strong>을 한 번 더 누르면 정답이 크게 보입니다!
+    <div class="menu-grid">
+        <button class="menu-btn" onclick="showSection('sec1', this)">1. 다주택자<br>(파는 순서 & 장기보유)</button>
+        <button class="menu-btn" onclick="showSection('sec2', this)">2. 비사업용 토지<br>(세금 중과 계산)</button>
+        <button class="menu-btn" onclick="showSection('sec3', this)">3. 1세대 1주택<br>(비과세 조건)</button>
+        <button class="menu-btn" onclick="showSection('sec4', this)">4. 농어촌 주택<br>(시골집 혜택)</button>
+        <button class="menu-btn" onclick="showSection('sec5', this)">5. 분양권/입주권<br>(주택수 포함 여부)</button>
+        <button class="menu-btn" onclick="showSection('sec6', this)">6. 일시적 2주택<br>(갈아타기 혜택)</button>
+        <button class="menu-btn" onclick="showSection('sec7', this)">7. 필요경비<br>(수리비 인정 범위)</button>
     </div>
 
-    <!-- ==========================================
-         1. 부가가치세 분야
-         ========================================== -->
-    <details class="category-details">
-        <summary class="category-summary">💰 부가가치세 분야</summary>
-        <div class="category-content">
-
-
-    <details class="item-details">
-        <summary class="category-summary">🚗 차 기름값이나 수리비도 세금을 깎아주나요?</summary>
-        <div class="answer-box"><strong>경차(모닝, 캐스퍼)</strong>, <strong>9인승 이상 승합차(카니발)</strong>, <strong>트럭</strong>만 세금을 깎아줍니다. 일반 세단이나 5인승 SUV는 사업에 썼더라도 세금을 안 깎아줍니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">📉 이번에 장사를 쉬어서 매출이 '0원'인데 신고해야 하나요?</summary>
-        <div class="answer-box">
-            <strong>장사를 안 하셨어도 '0원'이라고 꼭 신고해야 합니다.</strong> 신고를 안 하면 나라에서 세금을 마음대로 매기거나, 초기에 들어간 인테리어 비용을 돌려받지 못합니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">💳 개인 신용카드로 산 물건도 세금 깎아주나요?</summary>
-        <div class="answer-box">
-            <strong>가게 일에 진짜로 쓴 영수증이라면 깎아줍니다.</strong> 국세청(홈택스) 사이트에 내 카드를 미리 등록해 두면 영수증을 일일이 안 모아도 되니 편리합니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">🛵 배달앱(배민, 쿠팡) 매출은 어떻게 신고하나요?</summary>
-        <div class="answer-box">
-            컴퓨터 홈택스 화면에 자동으로 뜨지 않습니다. <strong>배달앱 사장님 사이트</strong>에 들어가서 '부가세 신고용 서류'를 따로 뽑아서 직접 적어내야 합니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">🏪 간이과세자(영세업자)도 세금 돌려받나요?</summary>
-        <div class="answer-box">
-            <strong>간이과세자는 세금을 돌려받을(환급) 수 없습니다.</strong> 낸 세금보다 돌려받을 게 더 많아도 나라에서는 그냥 세금 '0원'으로 끝내버립니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">🍎 내가 하는 장사가 세금이 붙는 장사인가요?</summary>
-        <div class="answer-box">
-            고기, 생선, 야채 같은 <strong>가공 안 한 먹거리</strong>나 <strong>병원, 학원, 책방</strong>은 세금이 없는 '면세'입니다. 옷가게, 식당, 카페 같은 일반 장사는 모두 세금이 붙는 '과세'입니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">🎁 거래처 선물이나 골프 비용은 세금을 깎아주나요?</summary>
-        <div class="answer-box">
-            영수증을 아무리 잘 챙겨도 <strong>접대나 선물에 쓴 돈은 부가세를 절대 안 깎아줍니다.</strong>
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">🛑 장사를 그만두었는데(폐업) 신고는 언제 하나요?</summary>
-        <div class="answer-box">
-            내년까지 기다리시면 안 됩니다. <strong>문 닫은 달의 다음 달 25일까지</strong> 무조건 바로 신고하셔야 벌금을 안 냅니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">📑 종이로 된 세금계산서를 받았는데 괜찮나요?</summary>
-        <div class="answer-box">
-            요즘은 컴퓨터로 주고받는 '전자' 세금계산서가 원칙입니다. 종이로 받아도 세금은 깎아주지만, 컴퓨터에 수자로 직접 쳐서 입력해야 하므로 자녀나 세무사의 도움을 받는 것이 좋습니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">💻 컴퓨터로 외국 광고(구글 등)를 냈는데 공제되나요?</summary>
-        <div class="answer-box">
-            외국에 있는 회사에 돈을 낸 것은 원칙적으로 세금을 안 깎아줍니다. 한국 지사(구글코리아 등)에서 정식 영수증을 끊어준 경우에만 가능합니다.
-        </div>
-    </details>
-
-   </div>
- </details>
-
-    <!-- ==========================================
-         2. 종합소득세 분야
-         ========================================== -->
-     <details class="category-details">
-        <summary class="category-summary">💰 종합소득세 분야</summary>
-        <div class="category-content">
-
-    <details class="item-details">
-        <summary class="category-summary">💼 직장을 다니면서 부업(유튜브, 알바)을 했는데 신고해야 하나요?</summary>
-        <div class="answer-box">
-            <strong>네, 회사 연말정산과 별개로 5월에 합산하여 신고해야 합니다.</strong> 프리랜서 수입(3.3%)이나 사업소득이 단 1원이라도 더 있다면 두 소득을 합쳐서 다시 계산해야 세금 폭탄을 피할 수 있습니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">👪 세금 신고할 때 부모님이나 자녀를 인적공제에 넣을 수 있나요?</summary>
-        <div class="answer-box">
-            <strong>나이와 소득 요건을 모두 지켜야 합니다.</strong> 부모님은 만 60세 이상, 자녀는 만 20세 이하여야 하며, 연간 소득금액이 100만 원(근로소득만 있다면 총급여 500만 원) 이하여야 공제받을 수 있습니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">📝 장부를 쓰지 않고 국가에서 정한 비율(경비율)로 신고해도 되나요?</summary>
-        <div class="answer-box">
-            <strong>매출이 적은 초기 사업자만 가능합니다.</strong> 일정 매출 이상(예: 도소매 6천만 원, 서비스업 2천4백만 원 이상)인 분들이 장부 없이 신고(추계신고)하면 가산세가 20%나 붙고 대출 시 불이익을 받습니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">🏥 건강보험료나 국민연금 낸 것도 소득세에서 깎아주나요?</summary>
-        <div class="answer-box">
-            <strong>국민연금은 전액 소득공제</strong>가 되며, 지역건강보험료나 직장건강보험료 회사부담분 등은 <strong>사업장 장부를 적을 때 비용(필요경비)으로 처리</strong>하여 세금을 줄일 수 있습니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">💸 프리랜서(3.3%)인데 세금을 돌려받을 수 있나요?</summary>
-        <div class="answer-box">
-            <strong>미리 뗀 3.3% 세금보다 내야 할 세금이 적으면 돌려받습니다.</strong> 5월 종합소득세 신고 시 수입이 적고 카드 영수증 등 경비 증빙이 많다면 나라에서 세금을 통장으로 환급해 줍니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">☂️ 노란우산공제에 가입하면 세금이 많이 줄어드나요?</summary>
-        <div class="answer-box">
-            <strong>소득에 따라 매년 최대 500만 원까지 소득공제 혜택을 줍니다.</strong> 소득이 높을수록 세금을 깎아주는 액수가 커지므로 소상공인과 프리랜서에게 매우 유리한 제도입니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">🏠 사업자등록을 안 한 개인인데도 종합소득세 고지서가 나오나요?</summary>
-        <div class="answer-box">
-            <strong>네, 등록을 안 했어도 소득이 잡히면 고지서가 나옵니다.</strong> 주택임대수입, 강사료, 프리랜서 수입 등은 국세청 전산에 모두 기록되므로 신고하지 않으면 가산세까지 합쳐서 고지서가 발송됩니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">📊 장사 적자가 났는데도 종합소득세 신고를 해야 하나요?</summary>
-        <div class="answer-box">
-            <strong>장부를 적서 적자(결손금)를 신고해 두면 미래에 이득입니다.</strong> 올해 손해 본 금액을 장부에 기록해 두면, 내년이나 후년에 돈을 많이 벌었을 때 그만큼 소득을 깎아주어 세금을 줄여줍니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">🧑‍🤝‍🧑 고용증대세액공제 같은 나라 지원금 혜택은 어떻게 받나요?</summary>
-        <div class="answer-box">
-            <strong>직원을 전년보다 새로 더 뽑았다면 1명당 수백만 원씩 세금을 깎아줍니다.</strong> 단, 청년이나 장애인을 뽑았는지에 따라 액수가 다르며, 2년 내에 직원을 자르면 깎아준 세금을 다시 뱉어내야 하므로 주의해야 합니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">📅 종합소득세 중간예납 고지서가 11월에 나왔는데 꼭 내야 하나요?</summary>
-        <div class="answer-box">
-            <strong>네, 작년 세금의 절반을 미리 내는 제도이므로 반드시 내야 합니다.</strong> 다만 올해 장사가 너무 안되어 상반기 매출이 작년의 30%도 안 된다면, 고지된 금액을 내지 않고 직접 계산해서 적게 신고하고 낼 수 있습니다.
-        </div>
-    </details>
-
-</div>
- </details>
-
-
-    <!-- ==========================================
-         3. 법인세 분야
-         ========================================== -->
-    <details class="category-details">
-        <summary class="category-summary">💰 법인세 분야</summary>
-        <div class="category-content">
-
-    <details class="item-details">
-        <summary class="category-summary">🎟️ 1.법인카드로 상품권을 사서 거래처에 줬는데 비용 처리가 되나요?</summary>
-        <div class="answer-box">
-            <strong>접대비(기업업무추진비) 한도 내에서만 인정됩니다.</strong> 상품권을 살 때 법인카드로 결제하고, 누구에게 주었는지 대장을 기록해 두어야 합니다. 증빙이 없으면 대표이사가 개인적으로 쓴 것으로 보아 대표이사에게 세금이 부과됩니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">💵 2. 대표이사가 회사 돈을 임의로 가져다 쓰고 나중에 채워 넣어도 되나요?</summary>
-        <div class="answer-box">
-            <strong>절대 안 됩니다. 세법에서는 이를 '가지급금'이라고 부르며 엄격히 벌을 줍니다.</strong> 회사 돈을 빌려 간 것으로 보아 대표는 회사에 매년 약 4.6%의 이자를 내야 하고, 회사는 이 이자만큼 법인세를 더 내야 합니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-      <summary class="category-summary">🚘 3. 법인 소유의 비싼 수입차는 비용 처리가 무제한으로 되나요?</summary>
-        <div class="answer-box">
-            <strong>아닙니다. 회사 전용 자동차보험에 필수로 가입해야 하고 운행일지를 써야 합니다.</strong> 보험에 가입해도 1년에 차 1대당 인정되는 비용(감가상각비+유지비) 한도가 정해져 있으며, 운행일지를 안 쓰면 혜택이 크게 줄어듭니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">💰 4. 사장님 마음대로 보너스(상여금)나 퇴직금을 정해서 가져가도 되나요?</summary>
-         <div class="answer-box">
-            <strong>안 됩니다. 반드시 정관(회사 규칙)이나 주주총회에서 정한 기준이 있어야 합니다. </strong> 아무 기준 없이 임의로 지급한 대표이사의 고액 상여금이나 퇴직금은 법인의 비용으로 인정받지 못하고 전액 세금으로 추징당합니다.
-        </div>
-    </details>
-  
-    <details class="item-details">  
-     <summary class="category-summary"> 🏢 5. 중소기업인데 법인세를 깎아주는 제도(감면)는 어떤 게 있나요?'</summary>  
-         <div class="answer-box">
-            <strong>지방에서 사업을 시작하거나 청년이 창업한 경우 법인세를 최대 50%에서 100%까지 몇 년 동안 면제해 주므로 요건을 꼭 확인해야 합니다</strong>
-         </div>
-   </details>
-
-   <details class="item-details">
-       <summary class="category-summary"> 🔬 6. 회사 이익으로 연구소(R&D)를 운영하면 세금이 준다는데 진짜인가요?</summary>  
-         <div class="answer-box">
-            <strong>혜택이 매우 크지만 국세청 검사가 가장 까다로운 항목입니다.</strong>연구원의 인건비 중 상당 부분을 세금에서 바로 빼주지만, 실제로 연구를 안 하고 서류만 꾸민 유령 연구소로 밝혀지면 수년 치 세금을 한꺼번에 토해내야 합니다.
-         </div> 
-   </details>
-
-   <details class="item-details">
-       <summary class="category-summary">🧾 7. 법인세 신고할 때 적격증빙(세금계산서, 카드 영수증)이 없으면 어떻게 되나요?</summary>  
-         <div class="answer-box">
-            <strong>비용으로 인정받기 어렵고, 인정받더라도 2%의 증빙불비 가산세를 내야 합니다.</strong>3만 원을 초과하는 지출은 반드시 세금계산서, 신용카드, 현금영수증(지출증빙)을 받아두어야 안전합니다.
-         </div>
-  </details>
-
-  <details class="item-details">
-       <summary class="category-summary"> 📦 8. 법인 결산할 때 재고자산(창고에 남은 물건) 금액을 마음대로 적어도 되나요?</summary>  
-         <div class="answer-box">
-            <strong>안 됩니다. 이익을 가짜로 늘리거나 줄이기 위해 재고 금액을 조작하면 세무조사 대상이 됩니다.</strong>실제 창고에 있는 물건과 장부상 수량이 맞는지 실사 서류를 보관해야 합니다.
-         </div> 
-   </details>
-
-   <details class="item-details">
-       <summary class="category-summary"> 9. 주주들에게 배당을 주면 회사 세금(법인세)이 줄어드나요? </summary>
-         <div class="answer-box">
-            <strong>배당을 준다고 해서 법인세가 줄어들지는 않습니다. </strong> 법인세는 이익에 대해 그대로 내는 것이고, 배당을 받은 주주들은 개인적으로 배당소득세를 추가로 내야 하므로 이중과세 문제가 생길 수 있어 전문가와 상의해야 합니다.
-          </div> 
-   </details>
-
-    <details class="item-details">
-       <summary class="category-summary"> 10. 법인세를 할부로 나누어서 낼 수 있나요? </summary>
-        <div class="answer-box">
-            <strong>납부할 세금이 1,000만 원을 넘으면 분납(나누어 내기)이 가능합니다. </strong>세금의 일부를 먼저 내고, 나머지 금액은 1개월(중소기업은 2개월) 이내에 이자 없이 나누어 낼 수 있습니다.
-        </div> 
-   </details> 
-
-</div>
- </details>
-
-
-
-   <details class="category-details">
-        <summary class="category-summary">💰 세무조사 분야</summary>
-        <div class="category-content"> 
-
-    <details class="item-details">
-        <summary class="category-summary">🎯 1. 우리 가게를 왜 조사하나요?</summary>
-        <div class="answer-box">
-            다른 비슷한 가게들보다 <strong>세금 신고를 너무 적게 했거나</strong>, 버는 돈에 비해 <strong>갑자기 비싼 땅이나 집을 샀을 때</strong> 컴퓨터가 자동으로 골라냅니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">🏦 2. 세무조사 나오면 내 개인 통장도 다 보나요?</summary>
-        <div class="answer-box">
-            원래는 회사 통장만 봅니다. 하지만 <strong>회사 돈을 내 개인 통장이나 가족 통장으로 옮긴 흔적</strong>이 보이면 가족 통장까지 싹 다 열어봅니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">💳 3. 법인카드로 주말에 밥 먹은 것도 문제 되나요?</summary>
-        <div class="answer-box">
-            <strong>주말에 쓴 돈, 마트 장 본 돈, 병원비, 면세점 지출</strong>은 무조건 걸립니다. 진짜로 일 때문에 썼다면 왜 썼는지 장부에 증거(출장 서류 등)를 남겨두어야 합니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">🧑‍🤝‍🧑 4. 가족을 직원으로 등록하고 월급 준 것은요?</summary>
-        <div class="answer-box">
-            실제로 일을 도왔어도 <strong>출근 기록이나 업무 일지가 없으면 가짜로 일한 것</strong>으로 보고 벌금을 물립니다. 통장으로 월급을 준 기록은 필수입니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">❓ 5. 물건을 진짜 사고 영수증을 받았는데, 그 회사가 가짜 회사라네요?</summary>
-        <div class="answer-box">
-            나라에서는 가짜 영수증으로 의심합니다. 내가 억울하게 당하지 않으려면 <strong>물건이 우리 가게로 들어온 트럭 사진, 거래할 때 주고받은 문자나 이메일</strong>을 보여줘야 인정해 줍니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">💰 6. 사장인 내 마음대로 보너스나 퇴직금을 가져가면 안 되나요?</summary>
-        <div class="answer-box">
-            내 회사라도 마음대로 큰돈을 가져가면 안 됩니다. 미리 <strong>회사 규칙(정관)이나 주주총회</strong>에서 "얼마를 주겠다"고 정해놓은 서류가 있어야만 비용으로 인정됩니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">🚘 7. 회사 이름으로 비싼 외제차 타도 되나요?</summary>
-        <div class="answer-box">
-            일단 <strong>회사 전용 자동차 보험</strong>에 필수로 가입해야 합니다. 매일매일 어디로 운전해서 일하러 갔는지 <strong>운행일지</strong>를 적지 않으면 세금 혜택을 주지 않습니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">💵 8. 회사 돈을 잠시 빌렸다가 채워 넣었는데 괜찮죠?</summary>
-        <div class="answer-box">
-            장부에 원인 없이 사장님이 가져간 돈은 <strong>'가지급금'이라고 해서 아주 나쁜 항목으로 봅니다.</strong> 회사에 이자도 내야 하고, 세무조사 때 오해를 받기 딱 좋습니다.
-        </div>
-    </details>
-
-<details class="item-details">
-        <summary class="category-summary">🚪 9. 가게 문을 닫았는데도 세무조사가 나오나요?</summary>
-        <div class="answer-box">
-            <strong>문을 닫았어도 과거 5년 치(나쁜 짓을 했다면 10년 치) 장부는 나라에서 언제든 다시 조사할 수 있습니다.</strong>
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">⏳ 10. 조사를 며칠만 한다더니 왜 안 끝나나요?</summary>
-        <div class="answer-box">
-             <strong> 조사하는 도중에 사장을 믿을 수 없거나, 또 다른 큰 탈세 증거가 나오면</strong> 나라에서 조사 기간을 한 달이고 두 달이고 더 늘릴 수 있습니다.
-        </div>
-    </details>
-
-</div>
- </details>
-
-
-    <details class="category-details">
-        <summary class="category-summary">💰 상속 증여세 분야</summary>
-        <div class="category-content">     
-
-    
-    <details class="item-details">
-        <summary class="category-summary">1. 자녀나 배우자에게 세금 없이 줄 수 있는 돈은 얼마까지인가요?</summary>배우자는 6억 원, 성인 자녀는 5,000만 원(미성년 자녀는 2,000만 원)까지 세금이 없습니다. 최근 법이 개정되어 혼인이나 출산 시에는 추가로 1억 원까지 더 증여세 없이 줄 수 있습니다.
-        <div class="answer-box">
-             <strong> 10년 동안 합산한 금액 기준으로 공제해 줍니다. </strong>
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">2. 부모님이 돌아가셨을 때 상속세는 무조건 내야 하나요?</summary>
-        <div class="answer-box">
-             <strong> 돌아가신 분의 재산이 일정 금액 이하이면 상속세가 나오지 않습니다. </strong>어머니(혹은 아버지가) 살아계신 상태에서 한 분이 돌아가시면 최소 10억 원, 홀로 계시던 분이 돌아가시면 최소 5억 원까지는 상속공제가 되어 세금이 없습니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">3. 자녀에게 집을 살 돈을 빌려주고 차용증을 쓰면 세금을 안 내나요?</summary>
-        <div class="answer-box">
-             <strong>가짜 차용증으로 의심받기 쉽습니다.</strong>실제로 은행 이자 수준(법정 이자율 4.6%)으로 이자를 자녀가 부모 통장에 꼬박꼬박 이체한 내역이 증명되어야 하며, 자녀가 그 이자를 줄 만한 능력이 있는지도 국세청이 조사합니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">4. 부모님 통장에서 현금을 조금씩 뽑아서 자녀에게 주면 안 걸리나요?</summary>
-        <div class="answer-box">
-             <strong> 당장은 안 걸려도 추후 부모님 사후 상속세 조사 때 다 적발됩니다. </strong>국세청은 사망 전 10년간 통장 거래 내역을 모두 조회하므로, 이유 없이 출금된 고액의 현금은 모두 자녀가 증여받은 것으로 추정하여 세금을 매깁니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">5. 자녀에게 현금을 주는 게 유리한가요, 부동산을 주는 게 유리한가요?</summary>
-        <div class="answer-box">
-             <strong>대체로 앞으로 가치가 오를 부동산을 먼저 주는 것이 유리합니다. </strong> 증여세는 '줄 당시의 금액'으로 세금을 매기기 때문에, 나중에 집값이 크게 오른 뒤에 물려주는 것보다 미리 부동산으로 주는 것이 세금을 아끼는 길입니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">6. 생활비나 손주 대학 등록금을 대주는 것도 증여세를 내나요?</summary>
-        <div class="answer-box">
-             <strong> 원칙적으로 부모가 능력이 있는데도 할아버지가 대주면 증여세 대상입니다. </strong>피부양자의 정상적인 생활비나 학비는 비과세지만, 생활비를 아껴서 자녀가 주식을 사거나 땅을 샀다면 증여세가 부과됩니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">7. 자녀에게 집을 싸게 팔거나(저가 양도) 대신 대출금을 갚아주면 어떻게 되나요?</summary>
-        <div class="answer-box">
-             <strong> 시가보다 너무 싸게 팔면 그 차액만큼 자녀가 증여를 받은 것으로 봅니다. </strong>또한, 대출을 낀 집을 물려주는 '부담부증여'의 경우 자녀의 대출 가액만큼은 부모가 집을 판 것으로 보아 부모에게 양도소득세가 나옵니다.
-        </div>
-    </details>
-
-    <details class="item-details">
-        <summary class="category-summary">8. 상속받은 아파트는 금액(시세)을 어떻게 정해서 신고하나요?</summary>
-        <div class="answer-box">
-             <strong> 돌아가신 날 전후 6개월 이내의 '사례가액(옆집이 얼마에 팔렸는지)'을 기준으로 삼습니다. </strong>아파트는 국세청 홈택스에서 비슷한 층과 평수의 매매 사실을 쉽게 조회할 수 있으므로, 대충 공시가격으로 신고했다가는 나중에 세금을 더 낼 수 있습니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">9. 증여세 신고를 안 하고 시간이 오래 지나면 안 걸리나요?</summary>
-        <div class="answer-box">
-             <strong> 증여세는 부과제척기간이 최대 15년(사기·무신고)입니다. </strong>자녀가 나중에 집을 사거나 사업을 시작할 때 국세청 전산 시스템이 자금 출처 조사를 하므로, 오랜 시간이 흘러도 결국 적발되어 엄청난 벌금(가산세)을 물게 됩니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">10. 상속재산을 가족끼리 합의해서 한 사람에게 다 몰아줘도 되나요?</summary>
-        <div class="answer-box">
-             <strong> 첫 상속재산 분할 때 합의해서 몰아주는 것은 괜찮습니다. </strong> 다만, 이미 한 번 똑같이 나누어 가졌다가 나중에 마음이 바뀌어 다시 한 사람에게 몰아주면, 형제들끼리 서로 돈을 '증여'한 것으로 보아 또 세금이 나올 수 있으니 처음에 신중해야 합니다.
-        </div>
-    </details>
-
-   </div>
- </details>
-
-
-   <details class="category-details">
-        <summary class="category-summary">💰 양도소득세 분야</summary>
-        <div class="category-content">     
-
-
-   <details class="item-details">
-        <summary class="category-summary">1. 1세대 1주택자는 집을 팔 때 무조건 세금이 없나요?</summary>
-        <div class="answer-box">
-             <strong> 2년 이상 보유(조정대상지역은 2년 거주까지)해야 하고, 파는 금액이 12억 원 이하여야 세금이 전혀 없습니다. </strong>파는 금액이 12억 원을 넘는 고가 주택은 12억 초과분에 대해 세금을 계산해서 내야 합니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">2. 시골에 집이 한 채 더 있는데, 이것도 다주택자가 되나요?</summary>
-        <div class="answer-box">
-             <strong> 원칙적으로 시골집도 주택 수에 포함됩니다. </strong>다만, 일정 요건(농어촌주택 특례)을 갖춘 시골집은 서울에 있는 본래 집을 팔 때 주택 수에서 빼주는 혜택이 있으므로 소유한 집의 공시가격과 평수를 꼭 확인해야 합니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">3. 이사를 가려고 일시적으로 집이 2채가 되었는데 세금을 내야 하나요?</summary>
-        <div class="answer-box">
-             <strong> 새 집을 사고 기존 집을 일정 기한(보통 3년) 내에 팔면 1주택자로 보아 세금을 안 냅니다. </strong>단, 종전 주택을 산 지 1년이 지난 후 새 주택을 샀어야 하는 등 세부 순서 조건을 지켜야 합니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">4. 아파트를 팔 때 인테리어(샤시, 확장 등) 비용도 공제해 주나요?</summary>
-        <div class="answer-box">
-             <strong>집의 가치를 높이는 큰 공사비(샤시, 베란다 확장, 보일러 교체 등)만 깎아줍니다. </strong>단순 도배, 장판, 싱크대 교체, 전등 교체 등은 일상적인 수리비로 보아 양도세 계산할 때 공제해 주지 않으며, 반드시 계좌이체 영수증이나 세금계산서가 있어야 합니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">5. 오피스텔을 팔 때 주택으로 보나요, 상가로 보나요?</summary>
-        <div class="answer-box">
-             <strong> 서류상 용도와 상관없이 '실제 사용한 용도'로 판단합니다. </strong>세입자가 들어와서 실제 주거용으로 살았다면 무조건 주택으로 계산되므로, 다른 집이 있는 분들은 다주택자 중과세를 맞을 수 있어 아주 조심해야 합니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">6. 부부 공동명의로 집을 가지고 있으면 양도세가 줄어드나요?</summary>
-        <div class="answer-box">
-             <strong> 네, 양도소득세는 사람별로 따로 계산하므로 세금이 줄어듭니다. </strong>높은 세율이 적용될 금액을 남편과 아내 둘로 나누기 때문에 낮은 누진세율이 적용되고, 인당 250만 원씩 주는 기본공제도 각각 받을 수 있어 유리합니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">7. 집을 여러 채 가진 다주택자는 세금이 무조건 무겁게 나오나요?</summary>
-        <div class="answer-box">
-             <strong> 정부 정책에 따라 다주택자 중과세 유예 제도가 연장되거나 바뀔 수 있습니다. </strong>중과세가 유예되는 기간에 집을 팔면 일반 세율로 적용받고 장기보유특별공제도 받을 수 있으므로, 집을 팔기 전 현재 시점의 임시 법안 규정을 반드시 확인해야 합니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">8. 양도소득세는 집을 팔고 언제까지 신고하고 내야 하나요?</summary>
-        <div class="answer-box">
-             <strong> 잔금을 받거나 등기를 넘겨준 날이 속하는 달의 말일부터 2달 이내에 신고해야 합니다. </strong>예를 들어 5월 10일에 잔금을 받았다면 7월 31일까지 주소지 관할 세무서에 신고해야 벌금을 안 냅니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">9. 오랜 기간 가지고 있던 땅이나 건물을 팔면 혜택이 있나요?</summary>
-        <div class="answer-box">
-             <strong> '장기보유특별공제'라고 해서 소유한 기간만큼 세금을 깎아줍니다. </strong>3년 이상 보유 시 매년 일정 비율(일반 부동산은 매년 2%, 최대 30%)씩 양도차익에서 빼주므로 오래 가질수록 세금 부담이 낮아집니다.
-        </div>
-    </details>
-
-   <details class="item-details">
-        <summary class="category-summary">10. 상가 건물을 팔 때 건물 분에 대한 부가가치세도 따로 내야 하나요?</summary>
-        <div class="answer-box">
-             <strong>네, 상가를 팔 때는 주택과 달리 건물 가격의 10%를 부가가치세로 내야 합니다. </strong>매매계약서를 쓸 때 "부가세는 매수인이 별도로 부담한다"는 조건을 명시하거나, '포괄양도양수'(사업 전체를 그대로 넘김) 형식을 취해야 부가세 분쟁을 막을 수 있습니다.
-        </div>
-    </details>
-
-  </div>
- </details>
-
-
-    <!-- 도움말 박스 -->
-    <div class="tip-box">
-        <div class="tip-title">💡 꼭 기억하세요!</div>
-        세무서에서 편지(통지서)가 날아왔을 때는 혼자 고민하지 마시고, 즉시 <strong>가까운 세무사 사무실</strong>이나 <strong>자녀분들</strong>에게 보여주고 도움을 청하는 것이 가장 안전합니다.
+    <div id="sec1" class="section">
+        <h2>어떤 집을 먼저 팔까요? (장기보유 혜택)</h2>
+        <label>A 주택 예상 남는 돈(양도차익) (만원)</label>
+        <input type="number" id="profitA" placeholder="예: 5000">
+        <label>B 주택 예상 남는 돈(양도차익) (만원)</label>
+        <input type="number" id="profitB" placeholder="예: 20000">
+        
+        <label class="checkbox-label">
+            <input type="checkbox" id="longTermCheck"> 파는 집을 3년 이상 보유하셨습니까?
+        </label>
+        
+        <button class="action-btn" onclick="checkOrder()">순서 및 공제 확인하기</button>
+        <div id="result1" class="result-box"></div>
+    </div>
+
+    <div id="sec2" class="section">
+        <h2>비사업용 토지 (농사 안 짓는 땅)</h2>
+        <label>토지 팔아서 남는 돈(양도차익) (만원)</label>
+        <input type="number" id="landProfit" placeholder="예: 10000">
+        <button class="action-btn" onclick="calcLandTax()">추가 세금 계산하기</button>
+        <div id="result2" class="result-box"></div>
+    </div>
+
+    <div id="sec3" class="section">
+        <h2>1세대 1주택 비과세 (세금 0원 조건)</h2>
+        <label>집을 파는 가격 (만원)</label>
+        <input type="number" id="salePrice" placeholder="예: 90000 (9억)">
+        <label>보유 및 거주 요건</label>
+        <select id="holdingPeriod">
+            <option value="fail">2년 미만 보유</option>
+            <option value="pass">2년 이상 보유 (조정지역은 2년 거주 완료)</option>
+        </select>
+        <button class="action-btn" onclick="checkExemption()">비과세 확인하기</button>
+        <div id="result3" class="result-box"></div>
+    </div>
+
+    <div id="sec4" class="section">
+        <h2>시골집(농어촌 주택) 주택수 제외 혜택</h2>
+        <label class="checkbox-label"><input type="checkbox" id="r1"> 읍, 면 등 시골 지역에 있습니까?</label>
+        <label class="checkbox-label"><input type="checkbox" id="r2"> 살 때 집값이 3억 원(한옥 4억) 이하입니까?</label>
+        <label class="checkbox-label"><input type="checkbox" id="r3"> 기존 도시 집을 먼저 사고, 나중에 시골집을 사셨습니까?</label>
+        <button class="action-btn" onclick="checkRural()">혜택 가능 여부 확인</button>
+        <div id="result4" class="result-box"></div>
+    </div>
+
+    <div id="sec5" class="section">
+        <h2>분양권과 입주권, 내 집(주택 수)에 포함될까?</h2>
+        <label>가지고 계신 권리는 무엇인가요?</label>
+        <select id="rightType">
+            <option value="member">조합원 입주권 (재건축/재개발)</option>
+            <option value="pre_before">분양권 (2020년 12월 31일 이전 취득)</option>
+            <option value="pre_after">분양권 (2021년 1월 1일 이후 취득)</option>
+        </select>
+        <button class="action-btn" onclick="checkRights()">주택 수 포함 확인하기</button>
+        <div id="result5" class="result-box"></div>
+    </div>
+
+    <div id="sec6" class="section">
+        <h2>이사 갈 때 혜택 (일시적 2주택)</h2>
+        <p class="tip">새 집을 사고 기존 집을 언제까지 팔아야 할까요?</p>
+        <label>새 집을 사고 나서, 기존 집을 몇 년 안에 파시나요?</label>
+        <select id="movePeriod">
+            <option value="within3">3년 이내에 팝니다</option>
+            <option value="over3">3년이 지나서 팝니다</option>
+        </select>
+        <button class="action-btn" onclick="checkMove()">갈아타기 혜택 확인</button>
+        <div id="result6" class="result-box"></div>
+    </div>
+
+    <div id="sec7" class="section">
+        <h2>집 수리비, 세금 줄일 때 인정받을 수 있을까?</h2>
+        <p class="tip">집의 가치를 높인 '자본적 지출'만 인정됩니다. (영수증 필수)</p>
+        <label class="checkbox-label"><input type="checkbox" id="exp1" value="O"> 베란다 샤시(창틀) 교체, 보일러 교체</label>
+        <label class="checkbox-label"><input type="checkbox" id="exp2" value="O"> 방 확장 공사, 상하수도 배관 교체</label>
+        <label class="checkbox-label"><input type="checkbox" id="exp3" value="O"> 부동산 복비(중개수수료), 취득세, 법무사 비용</label>
+        <label class="checkbox-label"><input type="checkbox" id="exp4" value="X"> 벽지, 장판 교체, 문짝 페인트칠</label>
+        <label class="checkbox-label"><input type="checkbox" id="exp5" value="X"> 싱크대 교체, 주방 타일 교체</label>
+        <button class="action-btn" onclick="checkExpense()">비용 인정 확인하기</button>
+        <div id="result7" class="result-box"></div>
     </div>
 
 </div>
+
+<script>
+    // 메뉴 전환
+    function showSection(secId, btn) {
+        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.menu-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(secId).classList.add('active');
+        btn.classList.add('active');
+        document.querySelectorAll('.result-box').forEach(el => el.style.display = 'none');
+    }
+
+    // 1. 다주택자 & 장특공제
+    function checkOrder() {
+        const a = Number(document.getElementById('profitA').value);
+        const b = Number(document.getElementById('profitB').value);
+        const isLongTerm = document.getElementById('longTermCheck').checked;
+        const res = document.getElementById('result1');
+        
+        if(a === 0 || b === 0) { res.innerHTML = "A주택과 B주택의 양도차익을 모두 입력해주세요."; res.style.display = 'block'; return; }
+        
+        let msg = "";
+        if (a < b) msg = "💡 차익이 적은 <strong>[A 주택]</strong>을 먼저 파시는 것이 좋습니다.<br>그래야 가장 돈이 많이 남는 B 주택을 마지막에 세금 없이(비과세) 팔 수 있습니다.";
+        else if (a > b) msg = "💡 차익이 적은 <strong>[B 주택]</strong>을 먼저 파시는 것이 좋습니다.<br>그래야 가장 돈이 많이 남는 A 주택을 마지막에 세금 없이(비과세) 팔 수 있습니다.";
+        else msg = "두 주택의 남는 돈이 같습니다. 어느 것을 먼저 파셔도 무방합니다.";
+
+        if(isLongTerm) msg += "<hr>✅ <strong>장기보유특별공제 적용:</strong><br>3년 이상 보유하셨으므로, 물가 상승분을 감안해 세금을 깎아주는 혜택을 받습니다. (다주택자는 연 2%, 최대 30%)";
+        else msg += "<hr>⚠️ <strong>장기보유특별공제 불가:</strong><br>보유기간이 3년 미만이라 장기보유 혜택은 받을 수 없습니다.";
+        
+        res.innerHTML = msg;
+        res.style.display = 'block';
+    }
+
+    // 2. 비사업용 토지
+    function calcLandTax() {
+        const profit = Number(document.getElementById('landProfit').value);
+        const res = document.getElementById('result2');
+        if(profit === 0) { res.innerHTML = "양도차익을 입력해주세요."; res.style.display = 'block'; return; }
+        
+        const normalTax = Math.floor(profit * 0.24); 
+        const penaltyTax = Math.floor(profit * 0.34);
+        const diff = penaltyTax - normalTax;
+        
+        res.innerHTML = "⚠️ <strong>비사업용 토지 벌칙 안내</strong><br>농사를 짓지 않은 땅은 세금 벌칙(중과세 10%)이 붙습니다.<br><br>" +
+                        "- 일반 땅 세금: 약 " + normalTax.toLocaleString() + "만 원<br>" +
+                        "- 비사업용 세금: 약 " + penaltyTax.toLocaleString() + "만 원<br><br>" +
+                        "👉 <strong>약 " + diff.toLocaleString() + "만 원을 더 내셔야 합니다.</strong>";
+        res.style.display = 'block';
+    }
+
+    // 3. 1세대 1주택
+    function checkExemption() {
+        const price = Number(document.getElementById('salePrice').value);
+        const period = document.getElementById('holdingPeriod').value;
+        const res = document.getElementById('result3');
+        
+        if(price === 0) { res.innerHTML = "가격을 입력해주세요."; res.style.display = 'block'; return; }
+        
+        if (period === 'fail') {
+            res.innerHTML = "❌ <strong>비과세 안 됨</strong><br>2년을 채우지 못하셨습니다. 2년을 꽉 채우고 파셔야 세금을 안 냅니다.";
+        } else if (price <= 120000) {
+            res.innerHTML = "🎉 <strong>세금 0원 (전액 비과세)</strong><br>2년 요건을 채우셨고 12억 원 이하이므로 양도소득세는 한 푼도 내지 않습니다.";
+        } else {
+            res.innerHTML = "⚠️ <strong>일부 세금 발생 (고가주택)</strong><br>12억 원까지는 세금이 없고, <strong>12억을 넘는 금액(" + (price - 120000).toLocaleString() + "만 원)</strong>에 대해서만 세금을 계산합니다.<br>*단, 거주기간이 길수록 장기보유특별공제(최대 80%)를 많이 받아 세금이 뚝 떨어집니다.";
+        }
+        res.style.display = 'block';
+    }
+
+    // 4. 농어촌 주택
+    function checkRural() {
+        const r1 = document.getElementById('r1').checked;
+        const r2 = document.getElementById('r2').checked;
+        const r3 = document.getElementById('r3').checked;
+        const res = document.getElementById('result4');
+        
+        if (r1 && r2 && r3) {
+            res.innerHTML = "🎉 <strong>시골집 주택수 제외 성공!</strong><br>도시 집을 파실 때 이 시골집은 없는 것으로 쳐줍니다. 따라서 도시 집은 1주택 혜택을 받습니다.";
+        } else {
+            res.innerHTML = "❌ <strong>조건 미달</strong><br>체크하지 않은 조건이 있어 시골집도 주택 수에 들어갑니다. 다주택자가 될 수 있으니 주의하세요.";
+        }
+        res.style.display = 'block';
+    }
+
+    // 5. 분양권/입주권
+    function checkRights() {
+        const type = document.getElementById('rightType').value;
+        const res = document.getElementById('result5');
+        
+        if(type === 'member') {
+            res.innerHTML = "⚠️ <strong>주택 수에 포함됩니다.</strong><br>조합원 입주권은 원래 내 집이었으므로 다른 집을 팔 때 주택 수에 1채로 계산됩니다.";
+        } else if (type === 'pre_before') {
+            res.innerHTML = "✅ <strong>주택 수에 포함되지 않습니다.</strong><br>2020년 12월 31일 이전에 사신 분양권은 권리로만 봅니다. (세금 계산 시 집 개수에서 빠짐)";
+        } else {
+            res.innerHTML = "⚠️ <strong>주택 수에 포함됩니다.</strong><br>세법이 바뀌어 <strong>2021년 1월 1일 이후에 취득한 분양권</strong>은 다른 집을 팔 때 주택 수 1채로 똑같이 계산됩니다.";
+        }
+        res.style.display = 'block';
+    }
+
+    // 6. 일시적 2주택
+    function checkMove() {
+        const period = document.getElementById('movePeriod').value;
+        const res = document.getElementById('result6');
+        
+        if(period === 'within3') {
+            res.innerHTML = "🎉 <strong>일시적 2주택 비과세 가능!</strong><br>새 집을 사고 <strong>3년 이내에 옛날 집을 파시므로</strong> 옛날 집은 1주택자로 인정받아 세금을 내지 않습니다.<br><span style='font-size:20px; color:#4a5568;'>(단, 옛날 집을 샀던 날부터 1년이 지난 후에 새 집을 샀어야 합니다.)</span>";
+        } else {
+            res.innerHTML = "❌ <strong>특례 기간 지남</strong><br>새 집을 사고 3년이 지나서 옛날 집을 파시면 <strong>다주택자</strong>로 세금을 내셔야 합니다. 파실 계획이라면 3년 기한을 꼭 지키세요.";
+        }
+        res.style.display = 'block';
+    }
+
+    // 7. 필요경비
+    function checkExpense() {
+        const res = document.getElementById('result7');
+        let msg = "💡 <strong>체크하신 항목의 수리비 인정 결과:</strong><br><ul style='text-align:left; font-size:24px;'>";
+        let checkedAny = false;
+        
+        for(let i=1; i<=5; i++){
+            let el = document.getElementById('exp' + i);
+            if(el.checked) {
+                checkedAny = true;
+                let text = el.parentElement.innerText.trim();
+                if(el.value === 'O') {
+                    msg += "<li style='color:blue; margin-bottom:10px;'>✅ <strong>[인정 됨]</strong> " + text + " (영수증 필수)</li>";
+                } else {
+                    msg += "<li style='color:red; margin-bottom:10px;'>❌ <strong>[인정 안됨]</strong> " + text + " (단순 유지보수로 보아 안 해줌)</li>";
+                }
+            }
+        }
+        msg += "</ul><br>👉 <strong>기억하세요:</strong> 집 구조를 바꾸거나 가치를 확 높이는 큰 공사만 인정되고, 낡아서 원래대로 고치는 인테리어(도배, 장판, 싱크대)는 인정되지 않습니다.";
+        
+        if(!checkedAny) {
+            res.innerHTML = "궁금하신 수리 항목을 체크해 주세요.";
+        } else {
+            res.innerHTML = msg;
+        }
+        res.style.display = 'block';
+    }
+</script>
 
 </body>
 </html>
-                
